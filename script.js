@@ -5,28 +5,43 @@ const next = document.querySelector(".next");
 const prev = document.querySelector(".prev");
 const mark = document.querySelector("mark");
 const desc = document.querySelector(".desc");
+const container = document.querySelector(".container");
 
 next.disabled = true;
 
-let count = 0;
+let questionCount = 1;
 let rightAns;
+const trackQuestion = [];
+
+function getRandomIdxBetween0And200() {
+  return Math.floor(Math.random() * 201); //201
+}
 
 // Render the questions in UI
 function handleShowQustionAns() {
-  const currData = data[count];
+  const currData = data[getRandomIdxBetween0And200()];
   const { id, question, correct_answer, incorrect_answers, description } =
     currData;
-  removeAllEvents();
-  questionUI.innerHTML = `${id}. ${question}`;
-  rightAns = correct_answer;
-  incorrect_answers.push(correct_answer);
-  incorrect_answers.sort();
-  for (let i = 0; i < incorrect_answers.length; i++) {
-    options[i].innerHTML = incorrect_answers[i];
+  if (trackQuestion.length === data.length) {
+    container.innerHTML = `<h2 align="center">You are done🫡</h2>`;
+    return;
   }
-  mark.innerHTML = description;
-  desc.style.display = "none";
-  count++;
+  if (trackQuestion.includes(id)) {
+    handleShowQustionAns();
+  } else {
+    trackQuestion.push(id);
+    removeAllEvents();
+    questionUI.innerHTML = `${questionCount}. ${question}`;
+    questionCount++;
+    rightAns = correct_answer;
+    incorrect_answers.push(correct_answer);
+    incorrect_answers.sort();
+    for (let i = 0; i < incorrect_answers.length; i++) {
+      options[i].innerHTML = incorrect_answers[i];
+    }
+    mark.innerHTML = description;
+    desc.style.display = "none";
+  }
 }
 
 function removeAllEvents() {
