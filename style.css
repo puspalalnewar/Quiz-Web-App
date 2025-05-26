@@ -13,6 +13,7 @@ body {
 .box{
   padding: 10px;
   margin-top: 20px;
+  min-height: 90vh;
 }
 
 header {
@@ -84,19 +85,15 @@ button {
 
 .desc {
   max-width: 500px;
-  margin: auto;
+  margin: 15px auto;
   box-shadow: 0 0 15px gray;
   border-radius: 15px;
   padding: 10px;
-  margin-top: 5px;
 }
 
 footer {
-  position: absolute;
-  width: 100%;
   text-align: center;
   font-weight: bold;
-  bottom: 0;
   padding: 20px 0;
   background-color: darkviolet;
 }
