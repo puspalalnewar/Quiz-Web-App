@@ -6,6 +6,7 @@ const prev = document.querySelector(".prev");
 const mark = document.querySelector("mark");
 const desc = document.querySelector(".desc");
 const container = document.querySelector(".container");
+const wrongSound = new Audio("Assets/wrong.mp3");
 
 next.disabled = true;
 
@@ -62,6 +63,13 @@ options.forEach((lists) => {
       next.disabled = false;
     } else {
       e.target.style.backgroundColor = "red";
+      if (navigator.vibrate) {
+        // Vibration API is supported
+        navigator.vibrate(500);
+      } else {
+        // Vibration API is not supported
+        console.log("Vibration API is not supported on this device.");
+      }
       options.forEach((list) => {
         if (list.innerHTML === rightAns) {
           list.style.backgroundColor = "green";
