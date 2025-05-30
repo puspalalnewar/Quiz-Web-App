@@ -6,7 +6,7 @@ const prev = document.querySelector(".prev");
 const mark = document.querySelector("mark");
 const desc = document.querySelector(".desc");
 const container = document.querySelector(".container");
-const wrongSound = new Audio("Assets/wrong.mp3");
+// const wrongSound = new Audio("Assets/wrong.mp3");
 
 next.disabled = true;
 
@@ -24,7 +24,7 @@ function handleShowQustionAns() {
   const { id, question, correct_answer, incorrect_answers, description } =
     currData;
   if (trackQuestion.length === data.length) {
-    container.innerHTML = `<h2 align="center">You are done🫡</h2>`;
+    container.innerHTML = `<h2 align="center">You are crazy🫡</h2>`;
     return;
   }
   if (trackQuestion.includes(id)) {
@@ -63,6 +63,7 @@ options.forEach((lists) => {
       next.disabled = false;
     } else {
       e.target.style.backgroundColor = "red";
+      // wrongSound.play();
       if (navigator.vibrate) {
         // Vibration API is supported
         navigator.vibrate(500);
