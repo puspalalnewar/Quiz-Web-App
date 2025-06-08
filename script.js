@@ -6,43 +6,51 @@ const prev = document.querySelector(".prev");
 const mark = document.querySelector("mark");
 const desc = document.querySelector(".desc");
 const container = document.querySelector(".container");
-// const wrongSound = new Audio("Assets/wrong.mp3");
 
 next.disabled = true;
 
-let questionCount = 1;
+let questionCount = 0;
 let rightAns;
-const trackQuestion = [];
 
-function getRandomIdxBetween0And200() {
-  return Math.floor(Math.random() * 201); //201
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    // Generate random index from 0 to i
+    const j = Math.floor(Math.random() * (i + 1));
+    // Swap elements arr[i] and arr[j]
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
+
+const shuffled = shuffleArray(data);
+let idx = -1;
 
 // Render the questions in UI
 function handleShowQustionAns() {
-  const currData = data[getRandomIdxBetween0And200()];
+  prev.disabled = false;
+  idx++;
+  questionCount++;
+  const currData = shuffled[idx];
   const { id, question, correct_answer, incorrect_answers, description } =
     currData;
-  if (trackQuestion.length === data.length) {
+  if (idx === data.length) {
     container.innerHTML = `<h2 align="center">You are crazy🫡</h2>`;
     return;
   }
-  if (trackQuestion.includes(id)) {
-    handleShowQustionAns();
-  } else {
-    trackQuestion.push(id);
-    removeAllEvents();
-    questionUI.innerHTML = `${questionCount}. ${question}`;
-    questionCount++;
-    rightAns = correct_answer;
+  removeAllEvents();
+
+  questionUI.innerHTML = `${questionCount}. ${question}`;
+
+  rightAns = correct_answer;
+  if (incorrect_answers.length < 4) {
     incorrect_answers.push(correct_answer);
     incorrect_answers.sort();
-    for (let i = 0; i < incorrect_answers.length; i++) {
-      options[i].innerHTML = incorrect_answers[i];
-    }
-    mark.innerHTML = description;
-    desc.style.display = "none";
   }
+  for (let i = 0; i < incorrect_answers.length; i++) {
+    options[i].innerHTML = incorrect_answers[i];
+  }
+  mark.innerHTML = description;
+  desc.style.display = "none";
 }
 
 function removeAllEvents() {
@@ -63,7 +71,6 @@ options.forEach((lists) => {
       next.disabled = false;
     } else {
       e.target.style.backgroundColor = "red";
-      // wrongSound.play();
       if (navigator.vibrate) {
         // Vibration API is supported
         navigator.vibrate(500);
@@ -93,7 +100,28 @@ function disabledAllOptions() {
   });
 }
 
+function showPrevQuestion() {
+  idx--;
+  if (idx === 0) {
+    prev.disabled = true;
+  }
+  questionCount = questionCount - 1;
+  const currData = shuffled[idx];
+  const { id, question, correct_answer, incorrect_answers, description } =
+    currData;
+
+  removeAllEvents();
+  questionUI.innerHTML = `${questionCount}. ${question}`;
+  rightAns = correct_answer;
+  for (let i = 0; i < incorrect_answers.length; i++) {
+    options[i].innerHTML = incorrect_answers[i];
+  }
+  mark.innerHTML = description;
+  desc.style.display = "none";
+}
+
 next.addEventListener("click", handleShowQustionAns);
-// prev.addEventListener("click", showPrevQuestion);
+prev.addEventListener("click", showPrevQuestion);
 
 handleShowQustionAns();
+prev.disabled = true;
