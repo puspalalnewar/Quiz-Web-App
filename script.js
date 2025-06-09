@@ -8,6 +8,7 @@ const desc = document.querySelector(".desc");
 const container = document.querySelector(".container");
 
 next.disabled = true;
+next.classList.add("disabled");
 
 let questionCount = 0;
 let rightAns;
@@ -28,6 +29,7 @@ let idx = -1;
 // Render the questions in UI
 function handleShowQustionAns() {
   prev.disabled = false;
+  prev.classList.remove("disabled");
   idx++;
   questionCount++;
   const currData = shuffled[idx];
@@ -38,9 +40,7 @@ function handleShowQustionAns() {
     return;
   }
   removeAllEvents();
-
   questionUI.innerHTML = `${questionCount}. ${question}`;
-
   rightAns = correct_answer;
   if (incorrect_answers.length < 4) {
     incorrect_answers.push(correct_answer);
@@ -55,9 +55,11 @@ function handleShowQustionAns() {
 
 function removeAllEvents() {
   next.disabled = true;
+  next.classList.add("disabled");
   options.forEach((ele) => {
+    // ele.style.backgroundColor = rgba(255, 255, 255, 0.15);
+    ele.style.backgroundColor = "#FFFFFF26";
     ele.style.pointerEvents = "all";
-    ele.style.backgroundColor = "rgb(19, 18, 18)";
   });
 }
 
@@ -69,6 +71,7 @@ options.forEach((lists) => {
       desc.style.display = "block";
       disabledAllOptions();
       next.disabled = false;
+      next.classList.remove("disabled");
     } else {
       e.target.style.backgroundColor = "red";
       if (navigator.vibrate) {
@@ -84,9 +87,11 @@ options.forEach((lists) => {
           desc.style.display = "block";
           disabledAllOptions();
           next.disabled = false;
+          next.classList.remove("disabled");
         } else {
           disabledAllOptions();
           next.disabled = false;
+          next.classList.remove("disabled");
         }
       });
     }
@@ -104,12 +109,12 @@ function showPrevQuestion() {
   idx--;
   if (idx === 0) {
     prev.disabled = true;
+    prev.classList.add("disabled");
   }
   questionCount = questionCount - 1;
   const currData = shuffled[idx];
   const { id, question, correct_answer, incorrect_answers, description } =
     currData;
-
   removeAllEvents();
   questionUI.innerHTML = `${questionCount}. ${question}`;
   rightAns = correct_answer;
@@ -125,3 +130,4 @@ prev.addEventListener("click", showPrevQuestion);
 
 handleShowQustionAns();
 prev.disabled = true;
+prev.classList.add("disabled");
